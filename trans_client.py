@@ -12,6 +12,10 @@ client.connect(ip_port)
 print("target servere has connected!")
 
 while True:
+	print(client.recv(1024).decode("utf-8"))		#print enter passwd imply
+	passwd = input(">>>>")
+	client.send(passwd.encode("utf-8"))
+	print(client.recv(1024).decode("utf-8")) 
 	content = input(">>>>")
 	print(type(content))
 	print(content)

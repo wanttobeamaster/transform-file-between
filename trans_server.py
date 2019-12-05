@@ -4,6 +4,8 @@ import hashlib
 import requests
 import re
 
+PASSWD = "xxxxxxx"
+
 print("Server Start...")
 
 #get the ip of the system:
@@ -28,6 +30,16 @@ while True:
 	print("connected : ",conn,"\naddr : ",addr)
 	while True:
 		i = 1
+		#conn.send("please enter the passwd".encode("utf-8"))
+		conn.send("please enter the passwd".encode("utf-8"))
+		passwd = conn.recv(1024).decode("utf-8")
+		if passwd != PASSWD:
+			conn.shutdown(2)
+			conn.close()
+			server.close()
+			break
+		else:
+			conn.send("which file".encode("utf-8"))
 		data = conn.recv(1024).decode("utf-8")		#receive the command
 		if not data:
 			print("command trans finished!")
@@ -52,7 +64,10 @@ while True:
 				md5 = m.hexdigest()
 				print("md5 : ",md5)
 				conn.send(md5.encode("utf-8"))		#send md5 message
+			conn.shutdown(2)
+			conn.close()
 			server.close()
+			break
 		except:
 			print("ERROR")
 			server.close()
